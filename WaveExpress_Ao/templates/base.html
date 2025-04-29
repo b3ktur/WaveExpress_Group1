@@ -28,20 +28,18 @@
                                href="{% url 'home' %}">Home</a>
                         </li>
                         
-                        <!-- Transaction #1: Passenger buys a ticket -->
                         <li class="nav-item">
                             <a class="nav-link {% if '/schedules/' in request.path %}active{% endif %}" 
                                href="{% url 'ferry_system:schedule_list' %}">Schedules</a>
                         </li>
                         
                         {% if user.is_authenticated %}
+                        <!-- Transaction #2: A passenger reserves a ticket -->
                         <li class="nav-item">
-                            <a class="nav-link {% if '/tickets/my-tickets/' in request.path %}active{% endif %}" 
-                               href="{% url 'ferry_system:my_tickets' %}">My Tickets</a>
+                            <a class="nav-link {% if '/reservations/my-reservations/' in request.path %}active{% endif %}" 
+                               href="{% url 'ferry_system:my_reservations' %}">My Reservations</a>
                         </li>
                         {% endif %}
-                        
-                        <!-- Add more navigation items for other transactions here later -->
                     </ul>
                     
                     <ul class="navbar-nav">
@@ -53,7 +51,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'ferry_system:my_tickets' %}">My Tickets</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'ferry_system:my_reservations' %}">My Reservations</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
                                 </ul>
@@ -99,7 +97,7 @@
                         <li><a href="{% url 'home' %}">Home</a></li>
                         <li><a href="{% url 'ferry_system:schedule_list' %}">Schedules</a></li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'ferry_system:my_tickets' %}">My Tickets</a></li>
+                        <li><a href="{% url 'ferry_system:my_reservations' %}">My Reservations</a></li>
                         {% endif %}
                     </ul>
                 </div>

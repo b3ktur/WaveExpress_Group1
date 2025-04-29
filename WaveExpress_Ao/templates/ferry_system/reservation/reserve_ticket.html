@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Reserve Ticket - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Reserve a Ticket</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5>Schedule Information:</h5>
+                        <p>
+                            <strong>Route:</strong> {{ schedule.route.route_name }}<br>
+                            <strong>Departure:</strong> {{ schedule.departure_time|date:"D, M d, Y" }} at {{ schedule.departure_time|time:"h:i A" }} from {{ schedule.route.departure_port.port_name }}<br>
+                            <strong>Arrival:</strong> {{ schedule.arrival_time|date:"D, M d, Y" }} at {{ schedule.arrival_time|time:"h:i A" }} at {{ schedule.route.arrival_port.port_name }}<br>
+                            <strong>Ferry:</strong> {{ schedule.ferry.ferry_name }}<br>
+                            <strong>Price:</strong> ₱{{ schedule.price }}<br>
+                            <strong>Available Seats:</strong> {{ available_capacity }}
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <div class="alert alert-warning">
+                            <h5>Reservation Policy:</h5>
+                            <ul>
+                                <li>Reservations require a deposit payment to confirm your booking.</li>
+                                <li>Reservations can be cancelled up to 48 hours before departure for a full refund.</li>
+                                <li>To complete your journey, you must convert your reservation to a full ticket before boarding.</li>
+                                <li>Reserved tickets must be claimed at least 1 hour before departure time.</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="agreement" required>
+                            <label class="form-check-label" for="agreement">
+                                I agree to the reservation terms and conditions
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Continue to Payment</button>
+                            <a href="{% url 'ferry_system:schedule_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

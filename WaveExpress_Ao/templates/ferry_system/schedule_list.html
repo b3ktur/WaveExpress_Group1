@@ -79,13 +79,12 @@
                         </td>
                         <td>₱{{ schedule.price }}</td>
                         <td>
-                            <a href="{% url 'ferry_system:buy_ticket' schedule.schedule_id %}" class="btn btn-success btn-sm">
-                                Buy Ticket
-                            </a>
                             {% if schedule.reserve %}
-                            <a href="{% url 'ferry_system:reserve_ticket' schedule.schedule_id %}" class="btn btn-outline-primary btn-sm mt-1">
+                            <a href="{% url 'ferry_system:reserve_ticket' schedule.schedule_id %}" class="btn btn-primary btn-sm">
                                 Reserve
                             </a>
+                            {% else %}
+                            <span class="badge bg-secondary">Reservation not available</span>
                             {% endif %}
                         </td>
                     </tr>

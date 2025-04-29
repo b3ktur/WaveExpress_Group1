@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservation Payment - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Pay Reservation Deposit</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <h5>Reservation Information:</h5>
+                        <p>
+                            <strong>Route:</strong> {{ schedule.route.route_name }}<br>
+                            <strong>Departure:</strong> {{ schedule.departure_time|date:"D, M d, Y" }} at {{ schedule.departure_time|time:"h:i A" }}<br>
+                            <strong>Departure Port:</strong> {{ schedule.route.departure_port.port_name }}<br>
+                            <strong>Arrival:</strong> {{ schedule.arrival_time|date:"D, M d, Y" }} at {{ schedule.arrival_time|time:"h:i A" }}<br>
+                            <strong>Arrival Port:</strong> {{ schedule.route.arrival_port.port_name }}<br>
+                            <strong>Ticket Price:</strong> ₱{{ schedule.price }}
+                        </p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <div class="mb-3">
+                            <label for="{{ form.deposit_percentage.id_for_label }}" class="form-label">
+                                {{ form.deposit_percentage.label }}:
+                            </label>
+                            {{ form.deposit_percentage }}
+                            <div class="form-text">{{ form.deposit_percentage.help_text }}</div>
+                            {% if form.deposit_percentage.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.deposit_percentage.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.payment_method.id_for_label }}" class="form-label">
+                                {{ form.payment_method.label }}:
+                            </label>
+                            {{ form.payment_method }}
+                            {% if form.payment_method.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.payment_method.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Credit/Debit Card fields (initially hidden) -->
+                        <div id="card-fields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="{{ form.card_type.id_for_label }}" class="form-label">
+                                    Card Type:
+                                </label>
+                                {{ form.card_type }}
+                                {% if form.card_type.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.card_type.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.card_number.id_for_label }}" class="form-label">
+                                    Card Number:
+                                </label>
+                                {{ form.card_number }}
+                                {% if form.card_number.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.card_number.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.expiry_date.id_for_label }}" class="form-label">
+                                            Expiry Date:
+                                        </label>
+                                        {{ form.expiry_date }}
+                                        {% if form.expiry_date.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.expiry_date.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.cvv.id_for_label }}" class="form-label">
+                                            CVV:
+                                        </label>
+                                        {{ form.cvv }}
+                                        {% if form.cvv.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.cvv.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GCash/Maya fields (initially hidden) -->
+                        <div id="mobile-payment-fields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="{{ form.mobile_number.id_for_label }}" class="form-label">
+                                    Mobile Number:
+                                </label>
+                                {{ form.mobile_number }}
+                                {% if form.mobile_number.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.mobile_number.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer fields (initially hidden) -->
+                        <div id="bank-transfer-fields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="{{ form.bank_name.id_for_label }}" class="form-label">
+                                    Bank Name:
+                                </label>
+                                {{ form.bank_name }}
+                                {% if form.bank_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.bank_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.account_name.id_for_label }}" class="form-label">
+                                    Account Name:
+                                </label>
+                                {{ form.account_name }}
+                                {% if form.account_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.account_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.reference_number.id_for_label }}" class="form-label">
+                                    Reference Number:
+                                </label>
+                                {{ form.reference_number }}
+                                {% if form.reference_number.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.reference_number.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Pay Deposit</button>
+                            <a href="{% url 'ferry_system:schedule_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethodSelect = document.getElementById('{{ form.payment_method.id_for_label }}');
+        const cardFields = document.getElementById('card-fields');
+        const mobilePaymentFields = document.getElementById('mobile-payment-fields');
+        const bankTransferFields = document.getElementById('bank-transfer-fields');
+        
+        function updatePaymentFields() {
+            const selectedMethod = paymentMethodSelect.value;
+            
+            // Hide all payment-specific fields first
+            cardFields.style.display = 'none';
+            mobilePaymentFields.style.display = 'none';
+            bankTransferFields.style.display = 'none';
+            
+            // Show the relevant fields based on the selection
+            if (selectedMethod === 'CREDIT_CARD' || selectedMethod === 'DEBIT_CARD') {
+                cardFields.style.display = 'block';
+            } else if (selectedMethod === 'GCASH' || selectedMethod === 'PAYMAYA') {
+                mobilePaymentFields.style.display = 'block';
+            } else if (selectedMethod === 'BANK_TRANSFER') {
+                bankTransferFields.style.display = 'block';
+            }
+        }
+        
+        paymentMethodSelect.addEventListener('change', updatePaymentFields);
+        
+        // Initial update based on the default selection
+        updatePaymentFields();
+    });
+</script>
+{% endblock %}
+
+{% endblock %}

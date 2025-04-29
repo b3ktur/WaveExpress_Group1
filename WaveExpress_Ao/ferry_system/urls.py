@@ -1,19 +1,20 @@
 from django.urls import path
 from . import views
-from . import ticket_views
+from . import reservation_views
 
 app_name = 'ferry_system'
 
 urlpatterns = [
-    # Schedule and ticket URLs (Transaction #1: Passenger buys a ticket)
-    path('schedules/', ticket_views.schedule_list, name='schedule_list'),
-    path('tickets/buy/<int:schedule_id>/', ticket_views.buy_ticket, name='buy_ticket'),
-    path('tickets/pay/<int:ticket_id>/', ticket_views.pay_ticket, name='pay_ticket'),
-    path('tickets/confirmation/<int:ticket_id>/', ticket_views.ticket_confirmation, name='ticket_confirmation'),
-    path('tickets/detail/<int:ticket_id>/', ticket_views.ticket_detail, name='ticket_detail'),
-    path('tickets/print/<int:ticket_id>/', ticket_views.print_ticket, name='print_ticket'),
-    path('tickets/cancel/<int:ticket_id>/', ticket_views.cancel_ticket, name='cancel_ticket'),
-    path('tickets/my-tickets/', ticket_views.my_tickets, name='my_tickets'),
+    # Schedule URL
+    path('schedules/', views.schedule_list, name='schedule_list'),
     
-    # More URLs will be added for other transactions
+    # Reservation URLs (Transaction #2: A passenger reserves a ticket)
+    path('reservations/reserve/<int:schedule_id>/', reservation_views.reserve_ticket, name='reserve_ticket'),
+    path('reservations/pay/<int:reservation_id>/', reservation_views.pay_reservation, name='pay_reservation'),
+    path('reservations/confirmation/<int:reservation_id>/', reservation_views.reservation_confirmation, name='reservation_confirmation'),
+    path('reservations/detail/<int:reservation_id>/', reservation_views.reservation_detail, name='reservation_detail'),
+    path('reservations/cancel/<int:reservation_id>/', reservation_views.cancel_reservation, name='cancel_reservation'),
+    path('reservations/convert/<int:reservation_id>/', reservation_views.convert_to_ticket, name='convert_to_ticket'),
+    # The complete_reservation_payment URL has been removed
+    path('reservations/my-reservations/', reservation_views.my_reservations, name='my_reservations'),
 ]

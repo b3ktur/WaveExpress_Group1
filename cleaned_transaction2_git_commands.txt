@@ -1,0 +1,49 @@
+# Git commands for Transaction #2: A passenger reserves a ticket
+
+# Make sure you're on the main branch and pulled the latest changes
+git checkout main
+git pull origin main
+
+# Create a new branch for transaction #2
+git checkout -b transaction2-reservation-system
+
+# Track removed files (files related to Transaction #1)
+git rm WaveExpress_Ao/ferry_system/ticket_forms.py
+git rm WaveExpress_Ao/ferry_system/ticket_views.py
+git rm WaveExpress_Ao/ferry_system/sample_data.py
+git rm -r WaveExpress_Ao/templates/ferry_system/ticket/
+git rm transaction1_git_commands.txt
+git rm transaction1_readme.md
+git rm reservation_sample_data.sql
+git rm WaveExpress_Ao/add_sample_data.py
+git rm WaveExpress_Ao/load_ferry_data.bat
+git rm WaveExpress_Ao/load_sample_data.bat
+git rm WaveExpress_Ao/sample_data.sql
+
+# Add the new files
+git add WaveExpress_Ao/ferry_system/reservation_forms.py
+git add WaveExpress_Ao/ferry_system/reservation_views.py
+git add WaveExpress_Ao/ferry_system/transaction2_sample_data.py
+git add WaveExpress_Ao/templates/ferry_system/reservation/
+git add WaveExpress_Ao/load_transaction2_data.py
+git add load_transaction2_data.bat
+git add transaction2_readme.md
+git add cleaned_transaction2_git_commands.txt
+
+# Add the modified files
+git add WaveExpress_Ao/ferry_system/urls.py
+git add WaveExpress_Ao/ferry_system/models.py
+git add WaveExpress_Ao/ferry_system/views.py
+git add WaveExpress_Ao/templates/base.html
+git add WaveExpress_Ao/templates/ferry_system/schedule_list.html
+
+# Commit the changes
+git commit -m "Implement Transaction #2: A passenger reserves a ticket (cleaned version)"
+
+# Push the branch to the remote repository
+git push origin transaction2-reservation-system
+
+# Create a pull request (do this on GitHub)
+# After code review, merge the pull request:
+git checkout main
+git pull origin main

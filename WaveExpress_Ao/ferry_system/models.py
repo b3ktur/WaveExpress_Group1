@@ -110,7 +110,8 @@ class Reservation(models.Model):
     RESERVATION_STATUS_CHOICES = [
         ('PENDING', 'Pending'),
         ('CONFIRMED', 'Confirmed'),
-        ('CANCELLED', 'Cancelled')
+        ('CANCELLED', 'Cancelled'),
+        ('COMPLETED', 'Completed')
     ]
     
     reservation_id = models.AutoField(primary_key=True)

@@ -1,17 +1,15 @@
 from django import forms
-from .models import Ticket, Payment, Passenger
+from .models import Reservation, Payment, Passenger
 from django.core.validators import MinValueValidator
+from django.utils import timezone
+import datetime
 
-class TicketPurchaseForm(forms.ModelForm):
-    seat_number = forms.CharField(
-        required=False,
-        max_length=10,
-        help_text="Optional. If left blank, a seat will be assigned automatically."
-    )
+class ReservationForm(forms.ModelForm):
+    """Form for creating a reservation"""
     
     class Meta:
-        model = Ticket
-        fields = ['seat_number']
+        model = Reservation
+        fields = []  # We'll set the schedule and passenger in the view
     
     def __init__(self, *args, **kwargs):
         self.schedule = kwargs.pop('schedule', None)
@@ -21,20 +19,25 @@ class TicketPurchaseForm(forms.ModelForm):
         # Add CSS classes to form fields
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Check if the schedule allows reservations
+        if self.schedule and not self.schedule.reserve:
+            raise forms.ValidationError("This schedule does not allow reservations.")
+        
+        # Check if schedule is in the past
+        if self.schedule and self.schedule.departure_time < timezone.now():
+            raise forms.ValidationError("Cannot reserve tickets for past schedules.")
+        
+        # Check if the departure is within 24 hours
+        if self.schedule and self.schedule.departure_time - timezone.now() < datetime.timedelta(hours=24):
+            raise forms.ValidationError("Reservations must be made at least 24 hours before departure.")
+        
+        return cleaned_data
 
-    def clean_seat_number(self):
-        seat_number = self.cleaned_data.get('seat_number')
-        if seat_number:
-            # Check if seat number is already taken for this schedule
-            if Ticket.objects.filter(
-                schedule=self.schedule,
-                seat_number=seat_number,
-                ticket_status='ACTIVE'
-            ).exists():
-                raise forms.ValidationError(f"Seat {seat_number} is already taken. Please choose another seat.")
-        return seat_number
-
-class TicketPaymentForm(forms.ModelForm):
+class ReservationPaymentForm(forms.ModelForm):
     CARD_TYPE_CHOICES = [
         ('VISA', 'Visa'),
         ('MC', 'MasterCard'),
@@ -49,7 +52,6 @@ class TicketPaymentForm(forms.ModelForm):
         ('GCASH', 'GCash'),
         ('PAYMAYA', 'Maya'),
         ('BANK_TRANSFER', 'Bank Transfer'),
-        ('CASH', 'Cash at Terminal'),
         ('7ELEVEN', '7-Eleven'),
     ]
     
@@ -71,11 +73,22 @@ class TicketPaymentForm(forms.ModelForm):
     account_name = forms.CharField(max_length=100, required=False)
     reference_number = forms.CharField(max_length=20, required=False)
     
+    # Reservation deposit amount (typically a percentage of the total ticket price)
+    deposit_percentage = forms.IntegerField(
+        initial=20,  # Default 20% deposit
+        min_value=10,
+        max_value=100,
+        help_text="Percentage of the total ticket price to pay as deposit (minimum 10%)",
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    
     class Meta:
         model = Payment
         fields = ['payment_method']
         
     def __init__(self, *args, **kwargs):
+        self.reservation = kwargs.pop('reservation', None)
+        self.schedule_price = kwargs.pop('schedule_price', 0)
         super().__init__(*args, **kwargs)
         
         # Add CSS classes to form fields
@@ -91,6 +104,7 @@ class TicketPaymentForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         payment_method = cleaned_data.get('payment_method')
+        deposit_percentage = cleaned_data.get('deposit_percentage', 20)
         
         if payment_method in ['CREDIT_CARD', 'DEBIT_CARD']:
             card_number = cleaned_data.get('card_number')
@@ -121,4 +135,15 @@ class TicketPaymentForm(forms.ModelForm):
             if not reference_number:
                 self.add_error('reference_number', 'Reference number is required for bank transfers.')
         
+        # Validate deposit percentage
+        if deposit_percentage < 10:
+            self.add_error('deposit_percentage', 'Minimum deposit is 10% of the ticket price.')
+        elif deposit_percentage > 100:
+            self.add_error('deposit_percentage', 'Maximum deposit cannot exceed 100% of the ticket price.')
+        
         return cleaned_data
+    
+    def get_deposit_amount(self):
+        """Calculate the deposit amount based on the percentage and schedule price"""
+        deposit_percentage = self.cleaned_data.get('deposit_percentage', 20)
+        return (self.schedule_price * deposit_percentage) / 100
