@@ -3,11 +3,88 @@
 {% block title %}WaveExpress - Home{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Welcome to the WaveExpress Ferry System</h1>
-            <p>This is the main dashboard. Templates will be added later.</p>
+<div class="container mt-4">
+    <div class="jumbotron bg-light p-5 rounded">
+        <h1 class="display-4">Welcome to WaveExpress Ferry System</h1>
+        <p class="lead">Your reliable partner for ferry transportation in the Philippines</p>
+        <hr class="my-4">
+        <p>Explore our services and manage your travel with ease across the Philippine archipelago.</p>
+    </div>
+    
+    <div class="row mt-4">
+        <!-- Transaction #1: Passenger buys a ticket -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Buy Tickets</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Browse available schedules and purchase your tickets online.</p>
+                    <a href="{% url 'ferry_system:schedule_list' %}" class="btn btn-primary">View Schedules</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- My Tickets -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">My Tickets</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">View and manage your purchased tickets.</p>
+                    <a href="{% url 'ferry_system:my_tickets' %}" class="btn btn-success">My Tickets</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Management -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">My Profile</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Manage your account and personal information.</p>
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-info">View Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional information -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Popular Routes</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Cebu City to Tagbilaran (Bohol)</li>
+                        <li class="list-group-item">Manila to Batangas</li>
+                        <li class="list-group-item">Cebu City to Manila</li>
+                        <li class="list-group-item">Batangas to Calapan (Mindoro)</li>
+                        <li class="list-group-item">Dumaguete to Siquijor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Announcements</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        New schedule added for weekend trips to Bohol!
+                    </div>
+                    <div class="alert alert-warning">
+                        Schedule changes for Manila North Harbor routes due to maintenance work.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

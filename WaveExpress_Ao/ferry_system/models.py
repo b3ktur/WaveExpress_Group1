@@ -138,9 +138,13 @@ class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('CREDIT_CARD', 'Credit Card'),
         ('DEBIT_CARD', 'Debit Card'),
+        ('GCASH', 'GCash'),
+        ('PAYMAYA', 'Maya'),
         ('BANK_TRANSFER', 'Bank Transfer'),
-        ('CASH', 'Cash'),
-        ('MOBILE_PAYMENT', 'Mobile Payment')
+        ('CASH', 'Cash at Terminal'),
+        ('7ELEVEN', '7-Eleven'),
+        ('GRABPAY', 'GrabPay'),
+        ('COINS_PH', 'Coins.ph')
     ]
     
     payment_id = models.AutoField(primary_key=True)

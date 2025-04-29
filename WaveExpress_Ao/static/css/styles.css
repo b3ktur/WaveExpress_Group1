@@ -1,0 +1,85 @@
+/* WaveExpress Ferry System Custom CSS */
+
+/* Global Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Form Styling */
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Card Styling */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar Styling */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Footer Styling */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Ticket Styling */
+.ticket-id {
+    font-family: monospace;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+/* Schedule Table Styling */
+.schedule-table th {
+    background-color: #f8f9fa;
+}
+
+.schedule-table tr:hover {
+    background-color: #f1f8ff;
+}
+
+/* Alerts and Messages */
+.alert {
+    border-radius: 0.25rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.25rem;
+}
+
+/* Status Badges */
+.badge {
+    font-weight: 500;
+}
+
+/* Ferry Illustration for empty states */
+.ferry-illustration {
+    max-width: 300px;
+    opacity: 0.7;
+}

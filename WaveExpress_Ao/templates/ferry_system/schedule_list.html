@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Schedules - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Available Ferry Schedules</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Search Schedules</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" action="{% url 'ferry_system:schedule_list' %}">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="departure_port">Departure Port:</label>
+                        <select name="departure_port" id="departure_port" class="form-select">
+                            <option value="">Any</option>
+                            {% for port in ports %}
+                                <option value="{{ port.port_id }}" {% if request.GET.departure_port == port.port_id|stringformat:"i" %}selected{% endif %}>
+                                    {{ port.port_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="arrival_port">Arrival Port:</label>
+                        <select name="arrival_port" id="arrival_port" class="form-select">
+                            <option value="">Any</option>
+                            {% for port in ports %}
+                                <option value="{{ port.port_id }}" {% if request.GET.arrival_port == port.port_id|stringformat:"i" %}selected{% endif %}>
+                                    {{ port.port_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="departure_date">Departure Date:</label>
+                        <input type="date" name="departure_date" id="departure_date" class="form-control" 
+                               value="{{ request.GET.departure_date }}">
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="{% url 'ferry_system:schedule_list' %}" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if schedules %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Route</th>
+                        <th>Ferry</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for schedule in schedules %}
+                    <tr>
+                        <td>{{ schedule.route.route_name }}</td>
+                        <td>{{ schedule.ferry.ferry_name }}</td>
+                        <td>
+                            <strong>{{ schedule.departure_time|date:"D, M d, Y" }}</strong><br>
+                            {{ schedule.departure_time|time:"h:i A" }}<br>
+                            <small>{{ schedule.route.departure_port.port_name }}</small>
+                        </td>
+                        <td>
+                            <strong>{{ schedule.arrival_time|date:"D, M d, Y" }}</strong><br>
+                            {{ schedule.arrival_time|time:"h:i A" }}<br>
+                            <small>{{ schedule.route.arrival_port.port_name }}</small>
+                        </td>
+                        <td>₱{{ schedule.price }}</td>
+                        <td>
+                            <a href="{% url 'ferry_system:buy_ticket' schedule.schedule_id %}" class="btn btn-success btn-sm">
+                                Buy Ticket
+                            </a>
+                            {% if schedule.reserve %}
+                            <a href="{% url 'ferry_system:reserve_ticket' schedule.schedule_id %}" class="btn btn-outline-primary btn-sm mt-1">
+                                Reserve
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No schedules found. Please try different search criteria.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

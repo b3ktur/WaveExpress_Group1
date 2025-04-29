@@ -1,0 +1,26 @@
+# Git Commands for Transaction #1: Passenger Buys a Ticket
+
+# First, make sure to commit any current changes to main/master branch
+git add .
+git commit -m "Initial model setup from ERD"
+
+# Create a new branch for Transaction #1
+git checkout -b transaction1_buy_ticket
+
+# Add the files for Transaction #1
+git add .
+
+# Commit the changes with a descriptive message
+git commit -m "Implement Transaction #1: Passenger buys a ticket"
+
+# Push the branch to the remote repository
+git push -u origin transaction1_buy_ticket
+
+# Once the branch is reviewed and ready to merge to main:
+git checkout main
+git merge transaction1_buy_ticket
+git push origin main
+
+# After merging, you can delete the branch if no longer needed
+git branch -d transaction1_buy_ticket
+git push origin --delete transaction1_buy_ticket

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket Details - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Ticket Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Ticket Number:</strong> {{ ticket.ticket_id }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Purchase Date:</strong> {{ ticket.purchase_date|date:"F d, Y" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Route:</strong> {{ ticket.schedule.route.route_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Ferry:</strong> {{ ticket.schedule.ferry.ferry_name }} ({{ ticket.schedule.ferry.model }})
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Departure:</strong><br>
+                            {{ ticket.schedule.departure_time|date:"D, M d, Y" }} at {{ ticket.schedule.departure_time|time:"h:i A" }}<br>
+                            <small>{{ ticket.schedule.route.departure_port.port_name }}, {{ ticket.schedule.route.departure_port.location }}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Arrival:</strong><br>
+                            {{ ticket.schedule.arrival_time|date:"D, M d, Y" }} at {{ ticket.schedule.arrival_time|time:"h:i A" }}<br>
+                            <small>{{ ticket.schedule.route.arrival_port.port_name }}, {{ ticket.schedule.route.arrival_port.location }}</small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Passenger:</strong> {{ ticket.passenger.passenger_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Seat Number:</strong> {{ ticket.seat_number|default:"Not assigned" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Ticket Status:</strong> 
+                            {% if ticket.ticket_status == 'ACTIVE' %}
+                                <span class="badge bg-success">{{ ticket.ticket_status }}</span>
+                            {% elif ticket.ticket_status == 'USED' %}
+                                <span class="badge bg-secondary">{{ ticket.ticket_status }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ ticket.ticket_status }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Payment Status:</strong> 
+                            {% if ticket.payment_status == 'PAID' %}
+                                <span class="badge bg-success">{{ ticket.payment_status }}</span>
+                            {% elif ticket.payment_status == 'UNPAID' %}
+                                <span class="badge bg-warning text-dark">{{ ticket.payment_status }}</span>
+                            {% elif ticket.payment_status == 'REFUNDED' %}
+                                <span class="badge bg-info">{{ ticket.payment_status }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if payment %}
+                    <div class="mt-4">
+                        <h4>Payment Information</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Payment Date:</strong> {{ payment.payment_date|date:"F d, Y" }}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Amount:</strong> ₱{{ payment.amount }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Payment Method:</strong> {{ payment.get_payment_method_display }}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Transaction Reference:</strong> {{ payment.transaction_reference }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {% if ticket.ticket_status == 'ACTIVE' and ticket.payment_status == 'UNPAID' %}
+                                <a href="{% url 'ferry_system:pay_ticket' ticket.ticket_id %}" class="btn btn-primary">
+                                    Pay Now
+                                </a>
+                            {% endif %}
+                            
+                            {% if ticket.ticket_status == 'ACTIVE' %}
+                                <a href="{% url 'ferry_system:cancel_ticket' ticket.ticket_id %}" class="btn btn-danger" 
+                                   onclick="return confirm('Are you sure you want to cancel this ticket?');">
+                                    Cancel Ticket
+                                </a>
+                            {% endif %}
+                            
+                            <a href="{% url 'ferry_system:print_ticket' ticket.ticket_id %}" class="btn btn-secondary" target="_blank">
+                                Print Ticket
+                            </a>
+                            
+                            <a href="{% url 'ferry_system:my_tickets' %}" class="btn btn-outline-secondary">
+                                Back to My Tickets
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

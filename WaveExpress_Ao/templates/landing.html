@@ -4,13 +4,77 @@
 
 {% block content %}
 <div class="container">
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center bg-light p-5 rounded">
         <h1>Welcome to WaveExpress Ferry System</h1>
-        <p class="lead">Book your ferry tickets online with ease!</p>
+        <p class="lead">Book your ferry tickets across the Philippine archipelago with ease!</p>
         <hr class="my-4">
         <p>Find schedules, book tickets, and manage your reservations all in one place.</p>
         <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Login</a>
         <a class="btn btn-success btn-lg" href="{% url 'accounts:register' %}" role="button">Register</a>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <i class="bi bi-geo-alt text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Popular Destinations</h3>
+                    <p class="card-text">Travel to popular destinations like Cebu, Bohol, Manila, Batangas, and more.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <i class="bi bi-clock text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Convenient Schedules</h3>
+                    <p class="card-text">Multiple departure times daily to fit your travel plans across the islands.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Safe & Reliable</h3>
+                    <p class="card-text">Modern vessels and experienced crew ensuring your safety on Philippine waters.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Our Routes</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Visayas Routes</h4>
+                            <ul>
+                                <li>Cebu City to Tagbilaran, Bohol</li>
+                                <li>Cebu City to Dumaguete</li>
+                                <li>Dumaguete to Siquijor</li>
+                                <li>Cebu City to Ormoc, Leyte</li>
+                                <li>Iloilo to Bacolod</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Luzon Routes</h4>
+                            <ul>
+                                <li>Manila to Batangas</li>
+                                <li>Batangas to Calapan, Mindoro</li>
+                                <li>Manila to Coron, Palawan</li>
+                                <li>Batangas to Puerto Galera</li>
+                                <li>Manila to Cebu City</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
