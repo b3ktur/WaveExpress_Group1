@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Schedules - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-list-alt me-2"></i>Available Schedules</h4>
+                </div>
+                <div class="card-body p-3">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+                        <div>
+                            <h5 class="mb-1"><i class="fas fa-route me-2 text-primary"></i>{{ search_params.origin }} to {{ search_params.destination }}</h5>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-calendar-day me-1"></i> {{ search_params.departure_date }} 
+                                <span class="mx-2">•</span> 
+                                <i class="fas fa-users me-1"></i> {{ search_params.passengers }} passenger(s)
+                            </p>
+                        </div>
+                        <a href="{% url 'schedule_search' %}" class="btn btn-outline-primary mt-2 mt-md-0">
+                            <i class="fas fa-search me-1"></i> Modify Search
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if schedules %}
+            <div class="col-12">
+                <div class="card shadow border-0 rounded-lg">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">Route</th>
+                                        <th>Date</th>
+                                        <th>Departure</th>
+                                        <th>Price</th>
+                                        <th>Available Seats</th>
+                                        <th class="text-center pe-4">Book</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for schedule in schedules %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-ship fa-2x text-primary me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">{{ schedule.origin }} to {{ schedule.destination_name }}</h6>
+                                                    <span class="text-muted small">WaveExpress Ferry</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ schedule.departure_date|date:"M d, Y" }}</td>
+                                        <td>{{ schedule.departure_time|time:"h:i A" }}</td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-bold">₱{{ schedule.price }}</span>
+                                                <span class="text-muted small">per person</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if schedule.available_seats > 20 %}
+                                                    <div class="me-2 badge bg-success">Many</div>
+                                                {% elif schedule.available_seats > 5 %}
+                                                    <div class="me-2 badge bg-warning">Limited</div>
+                                                {% else %}
+                                                    <div class="me-2 badge bg-danger">Almost Full</div>
+                                                {% endif %}
+                                                <span>{{ schedule.available_seats }} seats</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center pe-4">
+                                            {% if schedule.available_seats >= search_params.passengers %}
+                                            <a href="{% url 'create_reservation' schedule_id=schedule.id %}" class="btn btn-primary">
+                                                <i class="fas fa-ticket-alt me-1"></i> Book Now
+                                            </a>
+                                            {% else %}
+                                            <button class="btn btn-secondary" disabled>
+                                                <i class="fas fa-ban me-1"></i> Not Available
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="card shadow border-0 rounded-lg">
+                    <div class="card-body py-5 text-center">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5>No Schedules Found</h5>
+                        <p class="text-muted mb-4">Sorry, we couldn't find any ferry schedules matching your search criteria.</p>
+                        <div class="d-grid gap-2 col-md-6 mx-auto">
+                            <a href="{% url 'schedule_search' %}" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Try a Different Search
+                            </a>
+                            <a href="#popular-routes" class="btn btn-outline-secondary">
+                                <i class="fas fa-star me-2"></i>View Popular Routes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Popular Routes -->
+                <div id="popular-routes" class="card shadow border-0 rounded-lg mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-star text-warning me-2"></i>Popular Routes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1571683473144-dbab9af13a5e?auto=format&fit=crop&q=80&w=600" 
+                                         class="card-img-top" alt="Boracay" style="height: 120px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <h6>Manila to Boracay</h6>
+                                        <p class="text-muted mb-2">Daily departures at 8:00 AM and 3:00 PM</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Check Availability</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1602384564487-8452c7af9bfa?auto=format&fit=crop&q=80&w=600" 
+                                         class="card-img-top" alt="Bohol" style="height: 120px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <h6>Cebu to Bohol</h6>
+                                        <p class="text-muted mb-2">Daily departures at 8:00 AM and 3:00 PM</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Check Availability</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1581005133662-b6aa5dc427c6?auto=format&fit=crop&q=80&w=600" 
+                                         class="card-img-top" alt="Cebu" style="height: 120px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <h6>Batangas to Cebu</h6>
+                                        <p class="text-muted mb-2">Daily departures at 8:00 AM and 3:00 PM</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Check Availability</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

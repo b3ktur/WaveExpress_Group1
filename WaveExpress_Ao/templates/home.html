@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}WaveExpress - Book Ferry Tickets Across the Philippines{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="position-relative">
+        <div class="hero-image" style="height: 500px; background-image: url('https://images.unsplash.com/photo-1584551882971-38d6830cbebd?auto=format&fit=crop&q=80&w=1000'); background-size: cover; background-position: center;">
+            <div class="d-flex align-items-center justify-content-center h-100" style="background-color: rgba(0, 0, 0, 0.5);">
+                <div class="text-center text-white p-4">
+                    <h1 class="display-4 fw-bold mb-4">Explore the Philippines by Sea</h1>
+                    <p class="lead mb-4">Book your ferry tickets with WaveExpress for a seamless island-hopping adventure</p>
+                    <a href="{% url 'search_schedules' %}" class="btn btn-primary btn-lg">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Destinations -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Popular Destinations</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1571683473144-dbab9af13a5e?auto=format&fit=crop&q=80&w=600" class="card-img-top" alt="Boracay" height="200" style="object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Boracay</h5>
+                        <p class="card-text">Experience the world-famous white sand beaches and crystal-clear waters of Boracay Island.</p>
+                        <a href="#" class="btn btn-outline-primary">View Routes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1588433832062-58201de9783f?auto=format&fit=crop&q=80&w=600" class="card-img-top" alt="Palawan" height="200" style="object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Palawan</h5>
+                        <p class="card-text">Discover the enchanting lagoons, limestone cliffs, and pristine beaches of Palawan.</p>
+                        <a href="#" class="btn btn-outline-primary">View Routes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1581005133662-b6aa5dc427c6?auto=format&fit=crop&q=80&w=600" class="card-img-top" alt="Cebu" height="200" style="object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Cebu</h5>
+                        <p class="card-text">Enjoy the perfect blend of city life and natural wonders in the Queen City of the South.</p>
+                        <a href="#" class="btn btn-outline-primary">View Routes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose WaveExpress?</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-ticket-alt fa-3x text-primary mb-3"></i>
+                    <h4>Easy Booking</h4>
+                    <p>Book your tickets online with just a few clicks. Fast, secure, and convenient.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-money-bill-wave fa-3x text-primary mb-3"></i>
+                    <h4>Best Price Guarantee</h4>
+                    <p>Get the best prices for ferry tickets across the Philippine archipelago.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+                    <h4>24/7 Customer Support</h4>
+                    <p>Our customer service team is available round the clock to assist you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Start Your Journey?</h2>
+        <p class="lead mb-4">Explore the beautiful islands of the Philippines with WaveExpress</p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">Sign Up Now</a>
+        <a href="{% url 'search_schedules' %}" class="btn btn-outline-light btn-lg">Book a Trip</a>
+    </div>
+</section>
+{% endblock %}

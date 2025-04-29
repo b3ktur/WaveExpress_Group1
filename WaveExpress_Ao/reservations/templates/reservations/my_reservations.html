@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reservations - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <h2 class="mb-3 mb-md-0"><i class="fas fa-ticket-alt text-primary me-2"></i>My Reservations</h2>
+                <a href="{% url 'schedule_search' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Book New Trip
+                </a>
+            </div>
+        </div>
+        
+        {% if reservations %}
+            <div class="col-12">
+                <div class="card shadow border-0 rounded-lg">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4" width="30%">Trip Details</th>
+                                        <th width="20%">Travel Date</th>
+                                        <th width="10%">Passengers</th>
+                                        <th width="15%">Price</th>
+                                        <th width="25%">Status/Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for reservation in reservations %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light p-3 rounded-circle me-3">
+                                                    <i class="fas fa-ship text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-1 fw-bold">{{ reservation.schedule.origin }} to {{ reservation.schedule.destination.name }}</h6>
+                                                    <span class="text-muted small">Booking ID: #{{ reservation.id }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="fw-bold">{{ reservation.schedule.departure_date|date:"M d, Y" }}</div>
+                                                <div class="text-muted small">{{ reservation.schedule.departure_time|time:"h:i A" }}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-users text-primary me-2"></i>
+                                                <span>{{ reservation.number_of_passengers }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold">₱{{ reservation.total_price|floatformat:2 }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column align-items-start">
+                                                {% if reservation.status == 'confirmed' %}
+                                                    <div class="badge bg-success p-2">
+                                                        <i class="fas fa-check-circle me-1"></i> Confirmed
+                                                    </div>
+                                                {% elif reservation.status == 'pending' %}
+                                                    <div class="badge bg-warning text-dark p-2">
+                                                        <i class="fas fa-clock me-1"></i> Pending
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Tips -->
+                <div class="card shadow-sm border-0 rounded-lg mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-lightbulb text-warning me-2"></i>Booking Tips</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Arrive Early</h6>
+                                        <p class="small text-muted mb-0">Arrive at least 1 hour before departure for a smooth boarding experience.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-id-card fa-2x text-primary me-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Valid ID</h6>
+                                        <p class="small text-muted mb-0">Bring a valid ID that matches the name on your reservation.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-suitcase fa-2x text-primary me-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Luggage Limit</h6>
+                                        <p class="small text-muted mb-0">Each passenger is allowed 1 checked bag (max 20kg) and 1 carry-on.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="card shadow border-0 rounded-lg">
+                    <div class="card-body py-5 text-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7486/7486760.png" alt="No Reservations" class="img-fluid mb-4" style="max-width: 150px;">
+                        <h4 class="mb-3">No Reservations Found</h4>
+                        <p class="text-muted mb-4">You haven't made any ferry reservations yet. Start exploring beautiful destinations across the Philippines!</p>
+                        <a href="{% url 'schedule_search' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Find Ferry Schedules
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Popular Destinations -->
+                <div class="card shadow-sm border-0 rounded-lg mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-map-marker-alt text-danger me-2"></i>Popular Destinations</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1571683473144-dbab9af13a5e?auto=format&fit=crop&q=80&w=600" 
+                                         class="card-img-top" alt="Boracay" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Boracay</h6>
+                                        <p class="card-text small text-muted">Famous for its white sand beaches and crystal-clear waters.</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Find Tickets</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1588433832062-58201de9783f?auto=format&fit=crop&q=80&w=600" 
+                                         class="card-img-top" alt="Palawan" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Palawan</h6>
+                                        <p class="card-text small text-muted">Known for limestone cliffs, lagoons, and beautiful beaches.</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Find Tickets</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <img src="https://images.unsplash.com/photo-1602384564487-8452c7af9bfa?auto=format&fit=crop&q=80&w=600"
+                                         class="card-img-top" alt="Bohol" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Bohol</h6>
+                                        <p class="card-text small text-muted">Home to the Chocolate Hills and adorable tarsiers.</p>
+                                        <a href="{% url 'schedule_search' %}" class="btn btn-sm btn-outline-primary">Find Tickets</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Ferry Schedules - WaveExpress{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-search me-2"></i>Search Available Ferry Schedules</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.origin.id_for_label }}" class="form-label fw-bold">From</label>
+                                {{ form.origin.errors }}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
+                                    <input type="text" name="origin" class="form-control" id="{{ form.origin.id_for_label }}" placeholder="Manila, Cebu, Batangas..." required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.destination.id_for_label }}" class="form-label fw-bold">To</label>
+                                {{ form.destination.errors }}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
+                                    <input type="text" name="destination" class="form-control" id="{{ form.destination.id_for_label }}" placeholder="Boracay, Palawan, Bohol..." required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.departure_date.id_for_label }}" class="form-label fw-bold">Travel Date</label>
+                                {{ form.departure_date.errors }}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="date" name="departure_date" class="form-control" id="{{ form.departure_date.id_for_label }}" min="{{ today|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.passengers.id_for_label }}" class="form-label fw-bold">Number of Passengers</label>
+                                {{ form.passengers.errors }}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-users"></i></span>
+                                    <input type="number" name="passengers" class="form-control" id="{{ form.passengers.id_for_label }}" min="1" max="10" value="1" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search me-2"></i>Search Schedules
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Popular Routes -->
+            <div class="card shadow mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-star text-warning me-2"></i>Popular Routes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <img src="https://images.unsplash.com/photo-1571683473144-dbab9af13a5e?auto=format&fit=crop&q=80&w=300" 
+                                         class="img-fluid rounded mb-3" alt="Boracay" style="height: 100px; object-fit: cover;">
+                                    <h6>Manila to Boracay</h6>
+                                    <p class="text-muted mb-2">From ₱1,500</p>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="fillForm('Manila', 'Boracay')">Select</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <img src="https://images.unsplash.com/photo-1602384564487-8452c7af9bfa?auto=format&fit=crop&q=80&w=300" 
+                                         class="img-fluid rounded mb-3" alt="Bohol" style="height: 100px; object-fit: cover;">
+                                    <h6>Cebu to Bohol</h6>
+                                    <p class="text-muted mb-2">From ₱800</p>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="fillForm('Cebu', 'Bohol')">Select</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <img src="https://images.unsplash.com/photo-1581005133662-b6aa5dc427c6?auto=format&fit=crop&q=80&w=300" 
+                                         class="img-fluid rounded mb-3" alt="Cebu" style="height: 100px; object-fit: cover;">
+                                    <h6>Batangas to Cebu</h6>
+                                    <p class="text-muted mb-2">From ₱1,200</p>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="fillForm('Batangas', 'Cebu')">Select</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function fillForm(origin, destination) {
+    document.querySelector('input[name="origin"]').value = origin;
+    document.querySelector('input[name="destination"]').value = destination;
+    
+    // Set tomorrow's date as the default
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedDate = tomorrow.toISOString().split('T')[0];
+    document.querySelector('input[name="departure_date"]').value = formattedDate;
+    
+    // Scroll to the top of the form
+    document.querySelector('.card-header').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Set today's date as min value for the date input
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    document.querySelector('input[name="departure_date"]').min = formattedToday;
+    document.querySelector('input[name="departure_date"]').value = formattedToday;
+});
+</script>
+{% endblock %}
