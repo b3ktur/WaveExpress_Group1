@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to WaveExpress Ferry System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1>Welcome to WaveExpress Ferry System</h1>
+        <p class="lead">Book your ferry tickets online with ease!</p>
+        <hr class="my-4">
+        <p>Find schedules, book tickets, and manage your reservations all in one place.</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Login</a>
+        <a class="btn btn-success btn-lg" href="{% url 'accounts:register' %}" role="button">Register</a>
+    </div>
+</div>
+{% endblock %}

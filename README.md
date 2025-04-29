@@ -1,111 +1,107 @@
-# WaveExpress - Ferry Ticket Booking System
+# WaveExpress Ferry System
 
-A simplified web application for booking ferry tickets across the Philippines.
+A web-based ferry ticket booking and management system developed with Django.
 
-## Project Features
+## Project Overview
 
-1. **User Authentication**
-   - Landing page with login form
-   - User registration
-   - Session management
+WaveExpress is a comprehensive ferry management system that allows:
+- Passengers to book tickets and make reservations
+- Staff to manage ferries, schedules, and assignments
+- Admin to oversee the entire system
 
-2. **Ferry Booking System**
-   - Search for available schedules by origin, destination, date, and passenger count
-   - Book reservations
-   - View reservation history
-   - Check seat availability
+## Features
 
-3. **MySQL Stored Procedure**
-   - Custom stored procedure for finding available schedules
-   - Efficient schedule search with multiple criteria
+1. **Passenger Features**
+   - Buy tickets
+   - Reserve tickets
+   - Cancel reservations
+   - Make payments
 
-## Setup Instructions
+2. **Staff Features**
+   - Assign ferries to schedules
+   - Manage routes and ports
+   
+3. **Admin Features**
+   - Manage all system components
+   - View reports and analytics
 
-### Prerequisites
-- Python 3.8+
-- MySQL Server
-- pip (Python package manager)
+## Database Schema
 
-### Installation Steps
+The system uses the following entities:
+- **Ferry**: Stores information about available ferries
+- **Port**: Information about ports
+- **Route**: Routes between ports
+- **Schedule**: Ferry schedules with times and prices
+- **Passenger**: Passenger information
+- **Ticket**: Ticket details
+- **Reservation**: Reservation information
+- **Payment**: Payment processing
+- **Staff**: Staff information
+- **FerryAssignment**: Assignment of ferries to schedules by staff
 
-1. **Clone the repository**
+## Installation
+
+1. Clone the repository
    ```
-   git clone <repository-url>
+   git clone https://github.com/yourusername/WaveExpress_Group1_Ao.git
    cd WaveExpress_Group1_Ao
    ```
 
-2. **Set up a virtual environment (optional but recommended)**
+2. Create a virtual environment
    ```
    python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
-3. **Activate the virtual environment**
-   - Windows:
-     ```
-     .venv\Scripts\activate
-     ```
-   - macOS/Linux:
-     ```
-     source .venv/bin/activate
-     ```
-
-4. **Install required packages**
+3. Install dependencies
    ```
-   pip install django mysqlclient
+   pip install -r requirements.txt
    ```
 
-5. **Create the MySQL database**
-   ```sql
-   CREATE DATABASE dbwaveexpress_ao;
-   ```
+4. Configure database in settings.py
 
-6. **Apply migrations**
+5. Apply migrations
    ```
    cd WaveExpress_Ao
    python manage.py makemigrations
    python manage.py migrate
    ```
 
-7. **Import sample data**
-   Open MySQL console and run:
+6. Load sample data (optional)
    ```
-   USE dbwaveexpress_ao;
-   SOURCE sample_data.sql;
+   python manage.py shell < ferry_system/sample_data.py
+   ```
+   
+   Alternatively, you can use the batch file:
+   ```
+   load_ferry_data.bat
    ```
 
-8. **Create a superuser**
+7. Create a superuser
    ```
    python manage.py createsuperuser
    ```
 
-9. **Run the development server**
+8. Run the development server
    ```
    python manage.py runserver
    ```
 
-10. **Access the application**
-    - Website: http://127.0.0.1:8000/
-    - Admin panel: http://127.0.0.1:8000/admin/
+## Technologies Used
 
-## Project Structure
+- **Backend**: Django
+- **Database**: MySQL
+- **Frontend**: HTML, CSS, Bootstrap
+- **JavaScript**: For interactive elements
 
-- **accounts**: Handles user authentication (login/register)
-- **reservations**: Manages ferry schedules and bookings
+## Development Status
 
-## User Flow
+This project is currently under development.
 
-1. User arrives at the landing page
-2. User logs in or registers for a new account
-3. User searches for available ferry schedules
-4. User selects a schedule and books a reservation
-5. User can view all their reservations
+## License
 
-## Stored Procedure
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-The project uses a MySQL stored procedure `FindAvailableSchedules` to efficiently search for available schedules based on:
-- Origin location
-- Destination
-- Travel date
-- Number of passengers
+## Contributors
 
-This provides a more efficient way to query the database compared to standard ORM queries.
+- Your Team Members
