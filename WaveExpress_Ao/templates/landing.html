@@ -9,8 +9,29 @@
         <p class="lead">Book your ferry tickets across the Philippine archipelago with ease!</p>
         <hr class="my-4">
         <p>Find schedules, book tickets, and manage your reservations all in one place.</p>
-        <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Login</a>
-        <a class="btn btn-success btn-lg" href="{% url 'accounts:register' %}" role="button">Register</a>
+        
+        {% if user.is_authenticated %}
+        <!-- Buttons for logged-in users -->
+        <div class="d-grid gap-2 d-md-block">
+            <a class="btn btn-primary btn-lg me-2" href="{% url 'ferry_system:schedule_list' %}" role="button">
+                <i class="bi bi-calendar-week me-2"></i>View Schedules
+            </a>
+            <a class="btn btn-success btn-lg me-2" href="{% url 'ferry_system:my_reservations' %}" role="button">
+                <i class="bi bi-card-checklist me-2"></i>My Reservations
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url 'accounts:profile' %}" role="button">
+                <i class="bi bi-person-circle me-2"></i>My Profile
+            </a>
+        </div>
+        {% else %}
+        <!-- Buttons for visitors -->
+        <a class="btn btn-primary btn-lg me-2" href="{% url 'accounts:login' %}" role="button">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </a>
+        <a class="btn btn-success btn-lg" href="{% url 'accounts:register' %}" role="button">
+            <i class="bi bi-person-plus me-2"></i>Register
+        </a>
+        {% endif %}
     </div>
     
     <div class="row mt-5">

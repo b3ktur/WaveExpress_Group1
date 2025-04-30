@@ -17,26 +17,31 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             
-            # Create a user profile
-            profile = UserProfile.objects.create(
-                user=user,
-                phone_number=form.cleaned_data.get('phone_number'),
-                address=form.cleaned_data.get('address')
-            )
-            
-            # Create a passenger record
-            Passenger.objects.create(
-                user=user,
-                passenger_name=f"{user.first_name} {user.last_name}",
-                contact_number=profile.phone_number or '',
-                address=profile.address or '',
-                email=user.email
-            )
-            
-            # Log the user in
-            login(request, user)
-            messages.success(request, 'Account created successfully!')
-            return redirect('home')
+            try:
+                # Create a user profile
+                profile = UserProfile.objects.create(
+                    user=user,
+                    phone_number=form.cleaned_data.get('phone_number'),
+                    address=form.cleaned_data.get('address')
+                )
+                
+                # Create a passenger record
+                Passenger.objects.create(
+                    user=user,
+                    passenger_name=f"{user.first_name} {user.last_name}",
+                    contact_number=profile.phone_number or '',
+                    address=profile.address or '',
+                    email=user.email
+                )
+                
+                # Log the user in
+                login(request, user)
+                messages.success(request, 'Account created successfully!')
+                return redirect('home')
+            except Exception as e:
+                # If there's an error, log it and show a friendly message
+                print(f"Error creating user profile: {str(e)}")
+                messages.error(request, 'There was an issue creating your account. Please try again.')
     else:
         form = UserRegistrationForm()
     
@@ -70,13 +75,23 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     """User profile view"""
+    # Get or create user profile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
     try:
         # Check if user is a passenger
         passenger = Passenger.objects.get(user=request.user)
         is_passenger = True
     except Passenger.DoesNotExist:
-        passenger = None
-        is_passenger = False
+        # Create a passenger record if it doesn't exist
+        passenger = Passenger.objects.create(
+            user=request.user,
+            passenger_name=f"{request.user.first_name} {request.user.last_name}",
+            contact_number=profile.phone_number or '',
+            address=profile.address or '',
+            email=request.user.email
+        )
+        is_passenger = True
     
     try:
         # Check if user is a staff member
@@ -87,6 +102,7 @@ def profile_view(request):
         is_staff = False
     
     context = {
+        'profile': profile,
         'passenger': passenger,
         'staff': staff,
         'is_passenger': is_passenger,
@@ -98,8 +114,11 @@ def profile_view(request):
 @login_required
 def profile_update(request):
     """Update user profile view"""
+    # Get or create user profile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
-        form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        form = ProfileUpdateForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             
@@ -113,9 +132,9 @@ def profile_update(request):
                 pass
             
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')
+            return redirect('accounts:profile')
     else:
-        form = ProfileUpdateForm(instance=request.user.profile)
+        form = ProfileUpdateForm(instance=profile)
     
     return render(request, 'accounts/profile_update.html', {'form': form})
 

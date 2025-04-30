@@ -1,0 +1,33 @@
+# Git commands for Transaction #2: A passenger reserves a ticket
+
+# Make sure you're on the main branch and pulled the latest changes
+git checkout main
+git pull origin main
+
+# Create a new branch for transaction #2
+git checkout -b transaction2-reservation-system
+
+# Add the new files
+git add WaveExpress_Ao/ferry_system/reservation_forms.py
+git add WaveExpress_Ao/ferry_system/reservation_views.py
+git add WaveExpress_Ao/ferry_system/transaction2_sample_data.py
+git add WaveExpress_Ao/templates/ferry_system/reservation/
+git add transaction2_readme.md
+
+# Add the modified files
+git add WaveExpress_Ao/ferry_system/urls.py
+git add WaveExpress_Ao/ferry_system/models.py
+git add WaveExpress_Ao/ferry_system/views.py
+git add WaveExpress_Ao/templates/base.html
+git add WaveExpress_Ao/templates/ferry_system/schedule_list.html
+
+# Commit the changes
+git commit -m "Implement Transaction #2: A passenger reserves a ticket"
+
+# Push the branch to the remote repository
+git push origin transaction2-reservation-system
+
+# Create a pull request (do this on GitHub)
+# After code review, merge the pull request:
+git checkout main
+git pull origin main

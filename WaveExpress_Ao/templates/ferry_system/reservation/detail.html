@@ -1,162 +1,143 @@
 {% extends 'base.html' %}
 
-{% block title %}Reservation Details - WaveExpress{% endblock %}
+{% block title %}Reservation Receipt - WaveExpress{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container my-4">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Reservation #{{ reservation.reservation_id }}</h4>
-                    <span class="badge {% if reservation.status == 'CONFIRMED' %}bg-success{% elif reservation.status == 'PENDING' %}bg-warning{% else %}bg-danger{% endif %}">
-                        {{ reservation.status }}
-                    </span>
+            <!-- Reservation Receipt Card -->
+            <div class="card shadow">
+                <!-- Header with logo and title -->
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Reservation Receipt</h4>
+                        <span class="badge {% if reservation.status == 'CONFIRMED' %}bg-success{% elif reservation.status == 'PENDING' %}bg-warning text-dark{% else %}bg-danger{% endif %} p-2">
+                            {{ reservation.status }}
+                        </span>
+                    </div>
                 </div>
+                
+                <!-- Receipt Content -->
                 <div class="card-body">
-                    <div class="card mb-4">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">Trip Details</h5>
+                    <!-- Reservation ID and Date -->
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                        <div>
+                            <h5 class="text-muted mb-1">Reservation #</h5>
+                            <h4>{{ reservation.reservation_id }}</h4>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-striped">
-                                <tr>
-                                    <th width="35%">Route:</th>
-                                    <td>{{ reservation.schedule.route.route_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Departure:</th>
-                                    <td>
-                                        {{ reservation.schedule.departure_time|date:"D, M d, Y" }} at {{ reservation.schedule.departure_time|time:"h:i A" }}<br>
-                                        <small class="text-muted">{{ reservation.schedule.route.departure_port.port_name }}</small>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Arrival:</th>
-                                    <td>
-                                        {{ reservation.schedule.arrival_time|date:"D, M d, Y" }} at {{ reservation.schedule.arrival_time|time:"h:i A" }}<br>
-                                        <small class="text-muted">{{ reservation.schedule.route.arrival_port.port_name }}</small>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Ferry:</th>
-                                    <td>{{ reservation.schedule.ferry.ferry_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Reservation Date:</th>
-                                    <td>{{ reservation.date_of_reservation|date:"F d, Y" }} at {{ reservation.date_of_reservation|time:"h:i A" }}</td>
-                                </tr>
-                            </table>
+                        <div class="text-end">
+                            <h5 class="text-muted mb-1">Date</h5>
+                            <p class="mb-0 fs-5">{{ reservation.date_of_reservation|date:"F d, Y" }}</p>
                         </div>
                     </div>
-
-                    <div class="card mb-4">
-                        <div class="card-header bg-secondary text-white">
-                            <h5 class="mb-0">Passenger Information</h5>
-                        </div>
+                    
+                    <!-- Trip Information -->
+                    <div class="card mb-4 border-0 bg-light">
                         <div class="card-body">
-                            <table class="table table-striped">
-                                <tr>
-                                    <th width="35%">Name:</th>
-                                    <td>{{ reservation.passenger.passenger_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Email:</th>
-                                    <td>{{ reservation.passenger.email }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Contact Number:</th>
-                                    <td>{{ reservation.passenger.contact_number }}</td>
-                                </tr>
-                            </table>
+                            <h5 class="border-bottom pb-2 mb-3"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Trip Details</h5>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Route:</div>
+                                <div class="col-md-8 fw-bold">{{ reservation.schedule.route.route_name }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Departure:</div>
+                                <div class="col-md-8">
+                                    <span class="fw-bold">{{ reservation.schedule.departure_time|date:"D, M d, Y" }} at {{ reservation.schedule.departure_time|time:"h:i A" }}</span><br>
+                                    <small>{{ reservation.schedule.route.departure_port.port_name }}</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Arrival:</div>
+                                <div class="col-md-8">
+                                    <span class="fw-bold">{{ reservation.schedule.arrival_time|date:"D, M d, Y" }} at {{ reservation.schedule.arrival_time|time:"h:i A" }}</span><br>
+                                    <small>{{ reservation.schedule.route.arrival_port.port_name }}</small>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Ferry:</div>
+                                <div class="col-md-8 fw-bold">{{ reservation.schedule.ferry.ferry_name }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Ticket Price:</div>
+                                <div class="col-md-8 fw-bold">₱{{ reservation.schedule.price }}</div>
+                            </div>
                         </div>
                     </div>
-
-                    {% if payment %}
-                    <div class="card mb-4">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0">Payment Information</h5>
-                        </div>
+                    
+                    <!-- Passenger Information -->
+                    <div class="card mb-4 border-0 bg-light">
                         <div class="card-body">
-                            <table class="table table-striped">
-                                <tr>
-                                    <th width="35%">Transaction Reference:</th>
-                                    <td>{{ payment.transaction_reference }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Payment Method:</th>
-                                    <td>{{ payment.get_payment_method_display }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Amount Paid (Deposit):</th>
-                                    <td>₱{{ payment.amount }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Full Ticket Price:</th>
-                                    <td>₱{{ reservation.schedule.price }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Remaining Balance:</th>
-                                    <td>₱{{ reservation.schedule.price|floatformat:2|add:"-"|add:payment.amount|floatformat:2 }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Payment Date:</th>
-                                    <td>{{ payment.payment_date|date:"F d, Y" }} at {{ payment.payment_date|time:"h:i A" }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Payment Status:</th>
-                                    <td>
-                                        <span class="badge {% if payment.payment_status == 'COMPLETED' %}bg-success{% elif payment.payment_status == 'PENDING' %}bg-warning{% else %}bg-danger{% endif %}">
-                                            {{ payment.get_payment_status_display }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
+                            <h5 class="border-bottom pb-2 mb-3"><i class="bi bi-person-fill text-primary me-2"></i>Passenger Details</h5>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Name:</div>
+                                <div class="col-md-8 fw-bold">{{ reservation.passenger.passenger_name }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Email:</div>
+                                <div class="col-md-8">{{ reservation.passenger.email }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4 text-muted">Contact:</div>
+                                <div class="col-md-8">{{ reservation.passenger.contact_number }}</div>
+                            </div>
                         </div>
                     </div>
-                    {% else %}
+                    
+                    <!-- Status Information -->
+                    {% if reservation.status == 'PENDING' %}
                     <div class="alert alert-warning">
-                        <h5>Payment Required</h5>
-                        <p>This reservation requires payment to be confirmed.</p>
-                        <a href="{% url 'ferry_system:pay_reservation' reservation.reservation_id %}" class="btn btn-primary">Pay Now</a>
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-exclamation-triangle-fill" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Payment Required</h5>
+                                <p class="mb-2">This reservation requires payment within 24 hours or it will be automatically cancelled.</p>
+                                <a href="{% url 'ferry_system:pay_reservation' reservation.reservation_id %}" class="btn btn-warning">Pay Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif reservation.status == 'CONFIRMED' %}
+                    <div class="alert alert-success">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-check-circle-fill" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Reservation Confirmed</h5>
+                                <p class="mb-2">Your reservation has been confirmed. Please arrive at the port at least 30 minutes before departure.</p>
+                                {% if reservation.schedule.departure_time > now %}
+                                <a href="{% url 'ferry_system:convert_to_ticket' reservation.reservation_id %}" class="btn btn-success">Convert to Ticket</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% elif reservation.status == 'CANCELLED' %}
+                    <div class="alert alert-danger">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-x-circle-fill" style="font-size: 2rem;"></i>
+                            </div>
+                            <div>
+                                <h5>Reservation Cancelled</h5>
+                                <p>This reservation has been cancelled.</p>
+                            </div>
+                        </div>
                     </div>
                     {% endif %}
-
-                    <div class="d-grid gap-2">
-                        {% if reservation.status == 'CONFIRMED' and reservation.schedule.departure_time > now %}
-                            <a href="{% url 'ferry_system:convert_to_ticket' reservation.reservation_id %}" class="btn btn-success btn-lg">
-                                Convert to Ticket
-                            </a>
-                            
-                            {% if reservation.schedule.departure_time|timeuntil:now|split:" "|length > 1 %}
-                                {% if reservation.schedule.departure_time|timeuntil:now|split:" "|0 >= "2" and reservation.schedule.departure_time|timeuntil:now|split:" "|1 == "days" %}
-                                    <a href="{% url 'ferry_system:cancel_reservation' reservation.reservation_id %}" class="btn btn-danger">
-                                        Cancel Reservation
-                                    </a>
-                                {% else %}
-                                    <button class="btn btn-outline-danger" disabled>
-                                        Cannot Cancel (Within 48 Hours of Departure)
-                                    </button>
-                                {% endif %}
-                            {% else %}
-                                <button class="btn btn-outline-danger" disabled>
-                                    Cannot Cancel (Within 48 Hours of Departure)
-                                </button>
-                            {% endif %}
-                        {% elif reservation.status == 'CANCELLED' %}
-                            <button class="btn btn-outline-secondary" disabled>
-                                Reservation Cancelled
-                            </button>
-                        {% elif reservation.status == 'COMPLETED' %}
-                            <button class="btn btn-outline-success" disabled>
-                                Reservation Completed (Converted to Ticket)
-                            </button>
-                        {% endif %}
-                        
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 mt-4">
                         <a href="{% url 'ferry_system:my_reservations' %}" class="btn btn-secondary">
-                            Back to My Reservations
+                            <i class="bi bi-arrow-left me-2"></i>Back to My Reservations
                         </a>
                     </div>
+                </div>
+                
+                <!-- Footer with company info -->
+                <div class="card-footer text-center text-muted">
+                    <small>WaveExpress Ferry System &copy; 2025</small>
                 </div>
             </div>
         </div>

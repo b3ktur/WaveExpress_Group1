@@ -12,28 +12,28 @@
     </div>
     
     <div class="row mt-4">
-        <!-- Transaction #1: Passenger buys a ticket -->
+        <!-- Book Ferry -->
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Buy Tickets</h5>
+                    <h5 class="mb-0">Book a Ferry</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Browse available schedules and purchase your tickets online.</p>
+                    <p class="card-text">Browse available schedules and reserve your tickets online.</p>
                     <a href="{% url 'ferry_system:schedule_list' %}" class="btn btn-primary">View Schedules</a>
                 </div>
             </div>
         </div>
         
-        <!-- My Tickets -->
+        <!-- My Reservations -->
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">My Tickets</h5>
+                    <h5 class="mb-0">My Reservations</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">View and manage your purchased tickets.</p>
-                    <a href="{% url 'ferry_system:my_tickets' %}" class="btn btn-success">My Tickets</a>
+                    <p class="card-text">View and manage your ferry reservations.</p>
+                    <a href="{% url 'ferry_system:my_reservations' %}" class="btn btn-success">My Reservations</a>
                 </div>
             </div>
         </div>

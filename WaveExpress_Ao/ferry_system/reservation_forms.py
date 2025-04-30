@@ -9,12 +9,18 @@ class ReservationForm(forms.ModelForm):
     
     class Meta:
         model = Reservation
-        fields = []  # We'll set the schedule and passenger in the view
+        fields = ['schedule']  # Include schedule field to ensure proper validation
     
     def __init__(self, *args, **kwargs):
         self.schedule = kwargs.pop('schedule', None)
         self.passenger = kwargs.pop('passenger', None)
         super().__init__(*args, **kwargs)
+        
+        # Set the schedule as a hidden field with the initial value
+        if self.schedule:
+            self.fields['schedule'].initial = self.schedule.pk
+            self.fields['schedule'].widget = forms.HiddenInput()
+            self.fields['schedule'].disabled = False
         
         # Add CSS classes to form fields
         for field_name, field in self.fields.items():
